@@ -9,6 +9,16 @@
     
     let showModal = true;
 
+    let selectedCountry = '+60'; // Default to Malaysia
+    
+    const countries = [
+        { code: '+60', name: 'Malaysia', maxLength: 11 }, // Including the country code
+        { code: '+63', name: 'Philippines', maxLength: 10 },
+        { code: '+65', name: 'Singapore', maxLength: 8 },
+        { code: '+62', name: 'Indonesia', maxLength: 11 },
+        { code: '+66', name: 'Thailand', maxLength: 9 },
+    ];
+
     const handleSubmit = (event: Event) => {
         event.preventDefault();
         console.log({ firstName, lastName, email, phoneNumber, message });
@@ -36,8 +46,17 @@
     const filterNumericInput = (event: Event) => {
         const input = event.target as HTMLInputElement;
         input.value = input.value.replace(/\D/g, '');
+        
+        // Get max length for selected country
+        const country = countries.find(c => c.code === selectedCountry);
+        if (country && input.value.length > country.maxLength) {
+            input.value = input.value.slice(0, country.maxLength);
+        }
+        
         phoneNumber = input.value;
     };
+
+    $: fullPhoneNumber = phoneNumber ? `${selectedCountry}${phoneNumber}` : '';
 
     onMount(() => {
         if (showModal) {
@@ -68,13 +87,26 @@
         </div>
         <div class="form-group">
             <label for="phoneNumber">Phone Number:</label>
-            <input
-                id="phoneNumber"
-                type="text"
-                placeholder="Phone Number"
-                bind:value={phoneNumber}
-                on:input={filterNumericInput}
-            />
+            <div class="phone-input-container">
+                <select 
+                    bind:value={selectedCountry}
+                    class="country-select"
+                >
+                    {#each countries as country}
+                        <option value={country.code}>
+                            {country.name} ({country.code})
+                        </option>
+                    {/each}
+                </select>
+                <input
+                    id="phoneNumber"
+                    type="text"
+                    placeholder="Enter phone number"
+                    bind:value={phoneNumber}
+                    on:input={filterNumericInput}
+                    class="phone-input"
+                />
+            </div>
         </div>
         <div class="form-group">
             <label for="message">Message:</label>
@@ -113,39 +145,35 @@
 
     .modal-content {
         background-color: white;
-        padding: clamp(15px, 3vw, 20px);
+        padding: clamp(12px, 2vw, 16px);
         border-radius: 8px;
-        width: clamp(300px, 35vw, 380px);
+        width: clamp(280px, 30vw, 340px);
         max-width: 90%;
         box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
         display: flex;
-        margin-top: clamp(15px, 4vh, 25px);
+        margin-top: clamp(10px, 3vh, 20px);
         flex-direction: column;
         justify-content: space-between;
         text-align: center;
     }
 
     .modal-content h2 {
-        font-size: clamp(18px, 2.5vw, 22px);
-        font-weight: bold;
-        margin: 0 0 8px 0;
+        font-size: clamp(16px, 2vw, 20px);
+        margin: 0 0 6px 0;
     }
 
     .modal-content p {
-        font-size: clamp(13px, 1.5vw, 15px);
-        margin-bottom: 12px;
-    }
-
-    .form-group {
+        font-size: clamp(12px, 1.3vw, 14px);
         margin-bottom: 10px;
     }
 
+    .form-group {
+        margin-bottom: 8px;
+    }
+
     .form-group label {
-        font-size: 15px;
-        color: #333;
-        font-weight: 500;
-        display: block;
-        margin-bottom: 4px;
+        font-size: 13px;
+        margin-bottom: 3px;
     }
 
     .name-fields {
@@ -157,8 +185,8 @@
     .modal-content input[type="email"],
     .modal-content textarea {
         width: 100%;
-        padding: 8px 10px;
-        font-size: clamp(13px, 1.5vw, 15px);
+        padding: 6px 8px;
+        font-size: clamp(12px, 1.3vw, 14px);
         border: 1.5px solid #c2bebe;
         border-radius: 5px;
         color: #333;
@@ -168,7 +196,7 @@
 
     .modal-content textarea {
         resize: vertical;
-        min-height: clamp(45px, 8vh, 60px);
+        min-height: clamp(40px, 7vh, 50px);
         max-height: 150px;
     }
 
@@ -267,16 +295,16 @@
     /* PC Styles */
     @media (min-width: 769px) {
         .modal-content {
-            width: 700px;
+            width: 500px;
         }
     }
 
     /* Mobile Styles */
     @media (max-width: 768px) {
         .modal-content {
-            width: 85%;
-            padding: 15px;
-            margin-top: 15px;
+            width: 80%;
+            padding: 12px;
+            margin-top: 12px;
         }
 
         .button-group {
@@ -286,14 +314,14 @@
 
         .close-button, .submit-button {
             width: 100%;
-            padding: 11px;
-            font-size: 14px;
+            padding: 8px;
+            font-size: 13px;
         }
     }
 
     @media (max-width: 480px) {
         .modal-content h2 {
-            font-size: 28px;
+            font-size: 20px;
         }
 
         .modal-content p {
@@ -331,6 +359,37 @@
         .close-button:active, .submit-button:active {
             transform: scale(0.98);
             transition: transform 0.1s;
+        }
+    }
+
+    .phone-input-container {
+        display: flex;
+        gap: 8px;
+        margin-top: 3px;
+    }
+
+    .country-select {
+        padding: 6px;
+        font-size: clamp(12px, 1.3vw, 14px);
+        border: 1.5px solid #c2bebe;
+        border-radius: 5px;
+        color: #333;
+        background-color: #f5f5f5;
+        width: 140px;
+    }
+
+    .phone-input {
+        flex: 1;
+    }
+
+    @media (max-width: 480px) {
+        .phone-input-container {
+            gap: 4px;
+        }
+
+        .country-select {
+            width: 120px;
+            font-size: 12px;
         }
     }
 </style>

@@ -192,59 +192,6 @@
         width: 100%;
     }
 
-    .event-scheduler-title {
-        background-color: #ff6f00;
-        color: black;
-        padding: 10px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        font-family: 'Poppins', sans-serif;
-        flex-wrap: wrap;
-    }
-
-    .title {
-        font-size: 1rem;
-        font-weight: 600;
-    }
-
-    .nav-buttons {
-        display: flex;
-        align-items: center;
-        gap: 5px;
-    }
-
-    .nav-buttons button {
-        background: none;
-        border: none;
-        color: black;
-        cursor: pointer;
-        font-size: 1.2rem;
-        font-weight: 600;
-    }
-
-    .nav-buttons span {
-        font-size: 0.9rem;
-        font-weight: 600;
-    }
-
-    .icon-buttons {
-        display: flex;
-        gap: 5px;
-    }
-
-    .icon-buttons button {
-        background: none;
-        border: none;
-        color: black;
-        cursor: pointer;
-        font-size: 1.2rem;
-        font-weight: 600;
-        padding: 5px;
-        border-radius: 5px;
-        background-color: rgba(255, 255, 255, 0.2);
-    }
-
     .calendar-container {
         width: 100%;
         font-family: 'Poppins', sans-serif;
@@ -607,23 +554,66 @@
         border-radius: 4px; /* Optional: slightly round the corners */
         box-sizing: border-box; /* Ensure the border is included in the element's total width and height */
     }
-</style>
 
-<div class="event-scheduler-title">
-    <span class="title">Event Scheduler</span>
-    <div class="nav-buttons">
-        <button on:click={prevMonth}>❮</button>
-        <span>{formattedDate}</span>
-        <button on:click={nextMonth}>❯</button>
-    </div>
-    <div class="icon-buttons">
-        <button>◻</button>
-        <button>☰</button>
-    </div>
-</div>
+    .calendar-header {
+        background-color: #ff6f00;
+        color: black;
+        padding: 6px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .nav-buttons {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .nav-buttons button {
+        background: none;
+        border: none;
+        color: black;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: 600;
+        padding: 0 5px;
+    }
+
+    .nav-buttons span {
+        font-size: 0.85rem;
+        font-weight: 600;
+        min-width: 110px;
+        text-align: center;
+    }
+
+    /* Update mobile styles */
+    @media (max-width: 768px) {
+        .calendar-header {
+            padding: 5px;
+        }
+
+        .nav-buttons {
+            gap: 8px;
+        }
+
+        .nav-buttons span {
+            font-size: 0.75rem;
+            min-width: 90px;
+        }
+    }
+</style>
 
 <div class="container">
     <div class="calendar-container">
+        <div class="calendar-header">
+            <div class="nav-buttons">
+                <button on:click={prevMonth}>❮</button>
+                <span>{formattedDate}</span>
+                <button on:click={nextMonth}>❯</button>
+            </div>
+        </div>
         <div class="weekday-header">
             <div>SUNDAY</div>
             <div>MONDAY</div>
@@ -636,7 +626,13 @@
 
         <div class="days">
             {#each days as { day, isCurrentMonth }}
-                <div class="day {isCurrentMonth ? '' : 'past'} {isCurrentMonth && day === currentDate.getDate() ? 'current-day' : ''}">
+                <div class="day {isCurrentMonth ? '' : 'past'} {
+                    isCurrentMonth && 
+                    day === currentDate.getDate() && 
+                    currentMonth === currentDate.getMonth() && 
+                    currentYear === currentDate.getFullYear() 
+                    ? 'current-day' 
+                    : ''}">
                     {day}
                     {#if day !== null}
                         {@const event = getEventForDay(day)}
