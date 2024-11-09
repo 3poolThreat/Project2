@@ -1,168 +1,199 @@
 <script>
-    // Add any JavaScript functionality here if necessary
-  </script>
-  
-  <style>
+    import { onMount } from 'svelte';
+    let isLoaded = false;
+    
+    onMount(() => {
+        isLoaded = true;
+    });
+</script>
+
+<style>
+    :global(body) {
+        margin: 0;
+        padding: 0;
+        background: linear-gradient(135deg, #f6f8fd 0%, #f1f4f9 100%);
+        min-height: 100vh;
+        overflow-x: hidden;
+    }
+
     .container {
         display: flex;
         align-items: center;
-        justify-content: center;
-        font-family: Poppins, sans-serif;
-        color: #333;
-        text-align: left;
-        margin-top: 40px;
-        animation: fadeIn 1.5s ease-out; /* Animation for container */
+        justify-content: space-between;
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 40px;
+        height: 100vh;
+        position: relative;
     }
-  
-    .logo {
-        width: 520px;
-        height: auto;
-        margin-right: -3px;
-        filter: drop-shadow(10px 10px 15px rgba(0, 0, 0, 0.5));
-        margin-top: -40px;
-        opacity: 0;
-        animation: slideIn 1.5s ease-out forwards 0.5s; /* Slide-in animation */
-    }
-  
-    .text-content {
+
+    .logo-container {
+        flex: 1;
         display: flex;
-        flex-direction: column;
         justify-content: center;
+        align-items: center;
         opacity: 0;
-        animation: fadeInText 1.5s ease-out forwards 1s; /* Fade-in animation */
+        animation: slideIn 1s ease forwards;
     }
-  
-    .welcome-text, .title, .subtitle, .tagline {
+
+    .logo {
+        width: 500px;
+        height: auto;
+        filter: drop-shadow(0 10px 25px rgba(0, 0, 0, 0.15));
+    }
+
+    .text-content {
+        flex: 1;
+        padding-left: 60px;
         opacity: 0;
-        animation: fadeInText 1s ease-out forwards;
+        animation: fadeIn 1s ease forwards 0.5s;
     }
-  
+
     .welcome-text {
-        font-size: 58px;
-        color: #000000;
+        font-size: 42px;
+        color: #2c3e50;
         margin: 0;
-        line-height: 1;
-        font-weight: 600; /* Match boldness of tagline */
-        animation-delay: 1s;
-    }
-  
-    .title {
-        font-size: 115px;
-        font-weight: bold;
-        color: #000;
-        margin: 0;
-        line-height: 1;
-        animation-delay: 1.3s;
-    }
-  
-    .subtitle {
-        font-size: 67px;
         font-weight: 600;
-        color: #000;
+    }
+
+    .title {
+        font-size: 96px;
+        font-weight: 800;
+        background: linear-gradient(45deg, #2c3e50, #e47e3e);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
         margin: 0;
         line-height: 1;
-        animation-delay: 1.6s;
     }
-  
+
+    .subtitle {
+        font-size: 64px;
+        font-weight: 700;
+        color: #34495e;
+        margin: 0;
+        line-height: 1.1;
+    }
+
     .tagline {
-        font-size: 25px;
+        font-size: 24px;
         color: #e47e3e;
-        margin-top: 4px;
-        line-height: 1;
-        font-weight: 600; /* Maintain boldness */
-        animation-delay: 1.9s;
+        margin-top: 15px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
     }
-  
-    /* Keyframes for animations */
-    @keyframes fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
-    }
-  
+
     @keyframes slideIn {
-        from { transform: translateX(-50px); opacity: 0; }
-        to { transform: translateX(0); opacity: 1; }
+        from {
+            transform: translateX(-50px);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
     }
-  
-    @keyframes fadeInText {
-        from { opacity: 0; transform: translateY(20px); }
-        to { opacity: 1; transform: translateY(0); }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
-  
-    /* Responsive design adjustments */
-    @media only screen and (max-width: 768px) {
+
+    /* Responsive Design */
+    @media (max-width: 1200px) {
+        .container {
+            padding: 30px;
+        }
+
+        .logo {
+            width: 400px;
+        }
+
+        .title {
+            font-size: 80px;
+        }
+
+        .subtitle {
+            font-size: 54px;
+        }
+    }
+
+    @media (max-width: 968px) {
         .container {
             flex-direction: column;
-            margin-top: 20px;
-        }
-  
-        .logo {
-            width: 70%;
-            margin-right: 0;
-            margin-top: 0;
-        }
-  
-        .text-content {
+            justify-content: center;
             text-align: center;
-            margin-left: 0;
+            height: auto;
+            padding: 20px;
         }
-  
+
+        .logo-container {
+            margin-bottom: 40px;
+        }
+
+        .text-content {
+            padding-left: 0;
+        }
+
+        .logo {
+            width: 350px;
+        }
+
+        .title {
+            font-size: 64px;
+        }
+
+        .subtitle {
+            font-size: 42px;
+        }
+
         .welcome-text {
             font-size: 36px;
         }
-  
-        .title {
-            font-size: 72px;
-        }
-  
-        .subtitle {
-            font-size: 48px;
-        }
-  
-        .tagline {
-            font-size: 22px;
-        }
     }
-  
-    @media only screen and (max-width: 480px) {
+
+    @media (max-width: 480px) {
+        .container {
+            padding: 15px;
+        }
+
+        .logo {
+            width: 280px;
+        }
+
         .welcome-text {
             font-size: 28px;
         }
-  
+
         .title {
-            font-size: 50px;
+            font-size: 48px;
         }
-  
+
         .subtitle {
-            font-size: 36px;
+            font-size: 32px;
         }
-  
+
         .tagline {
-            font-size: 20px;
-        }
-  
-        .container {
-            padding: 10px;
-        }
-  
-        .logo {
-            width: 80%;
-        }
-  
-        .text-content {
-            margin-left: 0;
-            text-align: center;
+            font-size: 18px;
         }
     }
-  </style>
+</style>
+
+<div class="container">
+    <div class="logo-container">
+        <img src="Images/logo.png" alt="Event Scheduler Logo" class="logo" />
+    </div>
+    <div class="text-content">
+        <p class="welcome-text">Welcome to</p>
+        <p class="title">Event</p>
+        <p class="subtitle">Scheduler</p>
+        <p class="tagline">where scheduling your event happens.</p>
+    </div>
+</div>
   
-  <div class="container">
-      <img src="Images/logo.png" alt="Event Scheduler Logo" class="logo" />
-      <div class="text-content">
-          <p class="welcome-text">Welcome to</p>
-          <p class="title">Event</p>
-          <p class="subtitle">Scheduler</p>
-          <p class="tagline">where scheduling your event happens.</p>
-      </div>
-  </div>
   

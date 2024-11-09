@@ -601,6 +601,12 @@
         background-color: #808080;
         color: white;
     }
+
+    .current-day {
+        border: 2px solid orange;
+        border-radius: 4px; /* Optional: slightly round the corners */
+        box-sizing: border-box; /* Ensure the border is included in the element's total width and height */
+    }
 </style>
 
 <div class="event-scheduler-title">
@@ -630,7 +636,7 @@
 
         <div class="days">
             {#each days as { day, isCurrentMonth }}
-                <div class="day {isCurrentMonth ? '' : 'past'}">
+                <div class="day {isCurrentMonth ? '' : 'past'} {isCurrentMonth && day === currentDate.getDate() ? 'current-day' : ''}">
                     {day}
                     {#if day !== null}
                         {@const event = getEventForDay(day)}
