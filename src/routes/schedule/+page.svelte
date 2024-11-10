@@ -621,13 +621,13 @@
             </div>
         </div>
         <div class="weekday-header">
-            <div>SUNDAY</div>
-            <div>MONDAY</div>
-            <div>TUESDAY</div>
-            <div>WEDNESDAY</div>
-            <div>THURSDAY</div>
-            <div>FRIDAY</div>
-            <div>SATURDAY</div>
+            <div>SUN</div>
+            <div>MON</div>
+            <div>TUE</div>
+            <div>WED</div>
+            <div>THU</div>
+            <div>FRI</div>
+            <div>SAT</div>
         </div>
 
         <div class="days">

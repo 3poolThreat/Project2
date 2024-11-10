@@ -119,6 +119,7 @@
         height: auto;
         margin-right: 8px;
         transition: transform 0.3s, filter 0.3s;
+        filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5)); /* Darker shadow */
     }
 
     .event-scheduling-text {
@@ -138,7 +139,7 @@
 
     .logo-container:hover .logo-img {
         transform: scale(1.1);
-        filter: brightness(1.1);
+        filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.7)); /* Stronger and darker shadow on hover */
     }
 
     .logo-container:hover .event-scheduling-text {
