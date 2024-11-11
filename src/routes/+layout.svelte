@@ -134,12 +134,12 @@
 
     .logo-container:hover {
         background-color: #ffffff;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     }
 
     .logo-container:hover .logo-img {
         transform: scale(1.1);
-        filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.7)); /* Stronger and darker shadow on hover */
+        filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.7)); /* Stronger and darker shadow on hover */
     }
 
     .logo-container:hover .event-scheduling-text {
