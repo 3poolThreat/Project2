@@ -74,7 +74,7 @@
 {#if showModal}
 <div class="modal show">
     <div class="modal-content">
-        <h2>Contact Form</h2>
+        <b><h2>Contact Form</h2></b>
         <p>Got any questions you want us to answer?<br>Just write us a message here</p>
         
         <form on:submit={handleSubmit}>
@@ -248,13 +248,13 @@
     }
 
     .submit-button {
-        background-color: #4CAF50;
+        background-color: #ff6f00;
         color: white;
         width: 90px;
     }
 
     .submit-button:hover {
-        background-color: #45a049;
+        background-color: #c05300;
     }
 
     .submit-button:active {
@@ -262,13 +262,13 @@
     }
 
     .close-button {
-        background-color: #e74c3c;
+        background-color: #747474;
         color: white;
-        border: 1.5px solid #d73a32;
+        border: 1.5px solid #747474;
     }
 
     .close-button:hover {
-        background-color: #c0392b;
+        background-color: #505050;
     }
 
     .close-button:active {
