@@ -31,7 +31,7 @@
             message = '';
             showModal = false;
             localStorage.setItem('modalState', 'false');
-            window.location.href = '/';
+            window.location.href = './';
         }
     };
 
@@ -133,7 +133,7 @@
             </div>
 
             <div class="button-group">
-                <a href="/" class="close-button-link">
+                <a href="./" class="close-button-link">
                     <button type="button" class="close-button">Close</button>
                 </a>
                 
