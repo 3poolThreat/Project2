@@ -6,6 +6,7 @@
     let currentYear = currentDate.getFullYear();
     let days: { day: number | null, isCurrentMonth: boolean }[] = [];
     let showModal = false;
+    let showOverlapModal = false;
 
     // Add an interface for events
     interface Event {
@@ -44,6 +45,10 @@
         showModal = !showModal;
     }
 
+    function toggleOverlapModal() {
+        showOverlapModal = !showOverlapModal;
+    }
+
     function handleSubmit(event: SubmitEvent) {
         event.preventDefault();
         
@@ -53,10 +58,23 @@
         }
         
         const startDate = new Date(newEventStart);
-        const endDate = newEventEnd ? new Date(newEventEnd) : null;
+        const endDate = newEventEnd ? new Date(newEventEnd) : startDate;
         
-        if (endDate && endDate < startDate) {
+        if (endDate < startDate) {
             alert('End date cannot be before start date');
+            return;
+        }
+        
+        // Check for overlapping events
+        const isOverlapping = events.some(existingEvent => {
+            const existingStart = new Date(existingEvent.year, existingEvent.month, existingEvent.date);
+            const existingEnd = existingEvent.endDate ? new Date(existingEvent.endDate) : existingStart;
+            
+            return (startDate <= existingEnd && endDate >= existingStart);
+        });
+
+        if (isOverlapping) {
+            toggleOverlapModal();
             return;
         }
         
@@ -609,6 +627,55 @@
             min-width: 90px;
         }
     }
+
+    .modal-backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+
+    .modal {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        width: 90%;
+        max-width: 400px;
+    }
+
+    .modal h2 {
+        margin: 0 0 20px 0;
+        font-size: 1.2rem;
+    }
+
+    .modal p {
+        font-size: 1rem;
+        margin-bottom: 20px;
+    }
+
+    .modal-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 20px;
+    }
+
+    .modal-actions button {
+        padding: 8px 16px;
+        border-radius: 4px;
+        border: none;
+        cursor: pointer;
+    }
+
+    .cancel-btn {
+        background: #ddd;
+    }
 </style>
 
 <div class="container">
@@ -724,6 +791,18 @@
                     <button type="submit" class="save-btn">Save</button>
                 </div>
             </form>
+        </div>
+    </div>
+{/if}
+
+{#if showOverlapModal}
+    <div class="modal-backdrop" on:click={toggleOverlapModal}>
+        <div class="modal" on:click|stopPropagation>
+            <h2>Event Overlap</h2>
+            <p>This event overlaps with an existing event. Please choose a different time.</p>
+            <div class="modal-actions">
+                <button type="button" class="cancel-btn" on:click={toggleOverlapModal}>Close</button>
+            </div>
         </div>
     </div>
 {/if}
