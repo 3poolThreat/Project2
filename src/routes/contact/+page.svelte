@@ -114,7 +114,7 @@
                         </select>
                     </div>
                     <div class="input-with-icon">
-                        <i class="fas fa-phone-alt"></i>
+                        <i class="fas fa-mobile-alt"></i>
                         <input
                             id="phoneNumber"
                             type="text"
