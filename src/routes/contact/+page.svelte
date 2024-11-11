@@ -118,7 +118,7 @@
                         <input
                             id="phoneNumber"
                             type="text"
-                            placeholder="Enter phone number"
+                            placeholder="Phone Number"
                             bind:value={phoneNumber}
                             on:input={filterNumericInput}
                             class="phone-input"
