@@ -9,10 +9,10 @@
     
     let showModal = true;
 
-    let selectedCountry = '+60'; // Default to Malaysia
-    
+    let selectedCountry = '+60';
+
     const countries = [
-        { code: '+60', name: 'Malaysia', maxLength: 11 }, // Including the country code
+        { code: '+60', name: 'Malaysia', maxLength: 11 },
         { code: '+63', name: 'Philippines', maxLength: 10 },
         { code: '+65', name: 'Singapore', maxLength: 8 },
         { code: '+62', name: 'Indonesia', maxLength: 11 },
@@ -47,7 +47,6 @@
         const input = event.target as HTMLInputElement;
         input.value = input.value.replace(/\D/g, '');
         
-        // Get max length for selected country
         const country = countries.find(c => c.code === selectedCountry);
         if (country && input.value.length > country.maxLength) {
             input.value = input.value.slice(0, country.maxLength);
@@ -115,14 +114,15 @@
 
         <div class="button-group">
             <a href="/"><button on:click={closeModal} class="close-button">Close</button></a>
-            <a href="/"><button type="button" on:click={handleSubmit} class="submit-button">Submit</button></a>
+            <a href="/" class="submit-button-link">
+                <button type="button" class="submit-button">Submit</button>
+            </a>
         </div>
     </div>
 </div>
 {/if}
 
 <style>
-    /* Base Styles */
     .modal {
         position: fixed;
         top: 0;
@@ -158,7 +158,7 @@
     }
 
     .modal-content h2 {
-        font-size: clamp(16px, 2vw, 20px);
+        font-size: clamp(17px,3vw, 22px);
         margin: 0 0 6px 0;
     }
 
@@ -196,7 +196,7 @@
 
     .modal-content textarea {
         resize: vertical;
-        min-height: clamp(40px, 7vh, 50px);
+        min-height: clamp(41px, 7vh, 50px);
         max-height: 150px;
     }
 
@@ -231,7 +231,7 @@
     }
 
     .submit-button:hover {
-        background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+        background: linear-gradient(135deg, #225cda 0%, #1c4aca 100%);
         transform: translateY(-1px);
         box-shadow: 0 4px 8px rgba(37, 99, 235, 0.25),
                     inset 0 1px 1px rgba(255, 255, 255, 0.2);
@@ -243,14 +243,14 @@
     }
 
     .close-button {
-        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-        color: #475569;
+        background: linear-gradient(135deg, #f14e4e 0%, #db3939 100%);
+        color: white;
         border: 1px solid #e2e8f0;
     }
 
     .close-button:hover {
-        background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
-        color: #334155;
+        background: linear-gradient(135deg, #e24a4a 0%, #ca3535 100%);
+        color: white;
         transform: translateY(-1px);
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
     }
@@ -260,7 +260,6 @@
         background: #e2e8f0;
     }
 
-    /* Button ripple effect */
     .submit-button::after,
     .close-button::after {
         content: '';
@@ -292,14 +291,12 @@
         }
     }
 
-    /* PC Styles */
     @media (min-width: 769px) {
         .modal-content {
             width: 500px;
         }
     }
 
-    /* Mobile Styles */
     @media (max-width: 768px) {
         .modal-content {
             width: 80%;
@@ -349,7 +346,6 @@
         }
     }
 
-    /* Disable hover effects on touch devices but keep active state */
     @media (hover: none) {
         .close-button:hover, .submit-button:hover {
             transform: none;
@@ -393,4 +389,3 @@
         }
     }
 </style>
-  

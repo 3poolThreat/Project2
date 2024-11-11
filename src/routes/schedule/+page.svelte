@@ -209,10 +209,16 @@
     }
 
     .weekday-header div {
-        padding: 8px;
-        border-right: 1px solid white;
-        font-size: 0.9rem;
-    }
+    padding: 8px;
+    border-right: 1px solid white;
+    font-size: 0.9rem;
+}
+
+/* Remove the right border for the last element (Saturday) */
+.weekday-header div:last-child {
+    border-right: none;
+}
+
 
     .days {
         display: grid;

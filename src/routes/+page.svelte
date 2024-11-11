@@ -19,18 +19,17 @@
     .container {
         display: flex;
         align-items: center;
-        justify-content: space-between;
         max-width: 1400px;
         margin: 0 auto;
-        padding: 40px;
-        height: 100vh;
+        padding: 5px;
+        height: 75vh;
         position: relative;
     }
 
     .logo-container {
         flex: 1;
         display: flex;
-        justify-content: center;
+        justify-content: flex-end;
         align-items: center;
         opacity: 0;
         animation: slideIn 1s ease forwards;
@@ -61,6 +60,7 @@
         font-weight: 800;
         background: linear-gradient(45deg, #2c3e50, #e47e3e);
         -webkit-background-clip: text;
+        background-clip: text;
         -webkit-text-fill-color: transparent;
         margin: 0;
         line-height: 1;
@@ -104,7 +104,6 @@
         }
     }
 
-    /* Responsive Design */
     @media (max-width: 1200px) {
         .container {
             padding: 30px;
@@ -133,6 +132,7 @@
         }
 
         .logo-container {
+            justify-content: center;
             margin-bottom: 40px;
         }
 
@@ -195,5 +195,3 @@
         <p class="tagline">where scheduling your event happens.</p>
     </div>
 </div>
-  
-  
