@@ -5,13 +5,17 @@ export interface Event {
     name: string;
     time: string;
     endDate: Date | null;
+    phoneNumber: string;
 }
 
 export function validateEventForm(
     newEventTitle: string,
     newEventStart: string,
     newEventEnd: string,
-    events: Event[]
+    newPhoneNumber: string,
+    selectedCountryCode: string,
+    events: Event[],
+    editingEvent: Event | null
 ): { isValid: boolean; message: string } {
     if (!newEventTitle.trim()) {
         return { isValid: false, message: 'Event title is required.' };
@@ -21,6 +25,10 @@ export function validateEventForm(
         return { isValid: false, message: 'Start date and time are required.' };
     }
 
+    if (!newPhoneNumber.trim()) {
+        return { isValid: false, message: 'Phone number is required.' };
+    }
+
     const startDate = new Date(newEventStart);
     const endDate = newEventEnd ? new Date(newEventEnd) : startDate;
 
@@ -28,8 +36,11 @@ export function validateEventForm(
         return { isValid: false, message: 'End date cannot be before start date.' };
     }
 
-    // Check for event conflicts
+    // Check for event conflicts, excluding the event being edited
     const isConflict = events.some(event => {
+        if (editingEvent && event === editingEvent) {
+            return false;
+        }
         const eventStartDate = new Date(event.year, event.month, event.date);
         const eventEndDate = event.endDate ? new Date(event.endDate) : eventStartDate;
 
