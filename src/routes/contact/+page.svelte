@@ -113,8 +113,8 @@
         </div>
 
         <div class="button-group">
-            <a href="/"><button on:click={closeModal} class="close-button">Close</button></a>
-            <a href="/" class="submit-button-link">
+            <a href="./"><button on:click={closeModal} class="close-button">Close</button></a>
+            <a href="./" class="submit-button-link">
                 <button type="button" class="submit-button">Submit</button>
             </a>
         </div>

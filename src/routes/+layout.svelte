@@ -15,8 +15,8 @@
 </svelte:head>
 
 <div class="navbar">
-    <a href="/" class="logo-container">
-        <img src="Images/logo.png" alt="Mark Francis G. Jusoy Logo" class="logo-img" />
+    <a href="./" class="logo-container">
+        <img src="Images/logo.png" alt="Logo" class="logo-img" />
         <span class="event-scheduling-text">Event Scheduling</span>
     </a>
     <button class="burger" on:click={toggleMenu} aria-label="Toggle navigation" aria-expanded={isMenuOpen}>
@@ -25,11 +25,11 @@
         <div class="line"></div>
     </button>
     <div class={`navbar-links ${isMenuOpen ? 'open' : ''}`}>
-        <a href="/schedule" aria-label="Schedule" class="nav-link">
+        <a href="./schedule" aria-label="Schedule" class="nav-link">
             <img src="Images/calendar.gif" alt="Schedule" class="nav-img" />
             <span class="nav-text">Schedule</span>
         </a>
-        <a href="/contact" aria-label="Contact" class="nav-link">
+        <a href="./contact" aria-label="Contact" class="nav-link">
             <img src="Images/contact.gif" alt="Contact" class="nav-img" />
             <span class="nav-text">Contact</span>
         </a>
