@@ -8,7 +8,6 @@
     let showModal = false;
     let showOverlapModal = false;
 
-    // Add an interface for events
     interface Event {
         date: number;
         month: number;
@@ -16,28 +15,32 @@
         name: string;
         time: string;
         endDate: Date | null;
+        phoneNumber: string;
     }
 
-    // Initialize empty events array and make it reactive
     let events: Event[] = [];
-
-    // Add form data
     let newEventTitle = "";
     let newEventStart = "";
     let newEventEnd = "";
+    let newPhoneNumber = "";
+    let selectedCountryCode = "+63"; // Default to Philippines
 
-    // Add these variables
+    const countryCodes = [
+        { name: "Philippines", code: "+63", maxLength: 10 },
+        { name: "United States", code: "+1", maxLength: 10 },
+        { name: "United Kingdom", code: "+44", maxLength: 10 },
+        // Add more countries as needed
+    ];
+
     let showOptionsFor: Event | null = null;
     let editingEvent: Event | null = null;
 
-    // Add this reactive statement at the script level
     $: currentMonthEvents = events.filter(event => {
         const eventStartDate = new Date(event.year, event.month, event.date);
         const eventEndDate = event.endDate ? new Date(event.endDate) : eventStartDate;
         const monthStart = new Date(currentYear, currentMonth, 1);
         const monthEnd = new Date(currentYear, currentMonth + 1, 0);
         
-        // Show event if any part of it falls within the current month
         return eventStartDate <= monthEnd && eventEndDate >= monthStart;
     });
 
@@ -52,7 +55,7 @@
     function handleSubmit(event: SubmitEvent) {
         event.preventDefault();
         
-        if (!newEventStart || !newEventTitle) {
+        if (!newEventStart || !newEventTitle || !newPhoneNumber) {
             alert('Please fill in required fields');
             return;
         }
@@ -65,8 +68,10 @@
             return;
         }
         
-        // Check for overlapping events
         const isOverlapping = events.some(existingEvent => {
+            if (editingEvent && existingEvent === editingEvent) {
+                return false; // Skip the event being edited
+            }
             const existingStart = new Date(existingEvent.year, existingEvent.month, existingEvent.date);
             const existingEnd = existingEvent.endDate ? new Date(existingEvent.endDate) : existingStart;
             
@@ -89,22 +94,21 @@
             year: startDate.getFullYear(),
             name: newEventTitle,
             time: timeString,
-            endDate: endDate
+            endDate: endDate,
+            phoneNumber: `${selectedCountryCode} ${newPhoneNumber}`
         };
 
         if (editingEvent) {
-            // Update existing event
             events = events.map(e => e === editingEvent ? updatedEvent : e);
             editingEvent = null;
         } else {
-            // Add new event
             events = [...events, updatedEvent];
         }
         
-        // Reset form
         newEventTitle = "";
         newEventStart = "";
         newEventEnd = "";
+        newPhoneNumber = "";
         toggleModal();
     }
 
@@ -116,19 +120,28 @@
         });
     }
 
-    // Helper function to get event for a specific day
+    function filterNumericInput(event: InputEvent) {
+        const input = event.currentTarget as HTMLInputElement;
+        input.value = input.value.replace(/\D/g, '');
+        
+        const country = countryCodes.find(c => c.code === selectedCountryCode);
+        if (country && input.value.length > country.maxLength) {
+            input.value = input.value.slice(0, country.maxLength); // Limit length
+        }
+        
+        newPhoneNumber = input.value;
+    }
+
     function getEventForDay(day: number) {
         return events.find(event => {
             const startDate = new Date(event.year, event.month, event.date);
             const endDate = event.endDate ? new Date(event.endDate) : startDate;
             const checkDate = new Date(currentYear, currentMonth, day);
             
-            // Reset hours to compare just the dates
             startDate.setHours(0, 0, 0, 0);
             endDate.setHours(0, 0, 0, 0);
             checkDate.setHours(0, 0, 0, 0);
             
-            // Only return true if this is the start date or end date
             return checkDate.getTime() === startDate.getTime() || 
                    (event.endDate && checkDate.getTime() === endDate.getTime());
         });
@@ -144,12 +157,10 @@
         const daysInMonth = new Date(year, month + 1, 0).getDate();
         const daysInPrevMonth = new Date(year, month, 0).getDate();
 
-        // Add previous month's days
         for (let i = firstDay - 1; i >= 0; i--) {
             days.push({ day: daysInPrevMonth - i, isCurrentMonth: false });
         }
 
-        // Add current month's days
         for (let i = 1; i <= daysInMonth; i++) {
             days.push({ day: i, isCurrentMonth: true });
         }
@@ -175,9 +186,8 @@
 
     $: formattedDate = new Date(currentYear, currentMonth).toLocaleString('default', { month: 'long' }) + ', ' + currentYear;
 
-    // Add these functions
     function toggleOptions(event: Event, e: MouseEvent) {
-        e.stopPropagation(); // Prevent event bubbling
+        e.stopPropagation();
         showOptionsFor = showOptionsFor === event ? null : event;
     }
 
@@ -189,10 +199,22 @@
     function editEvent(event: Event) {
         editingEvent = event;
         newEventTitle = event.name;
-        newEventStart = new Date(event.year, event.month, event.date).toISOString().slice(0, 16);
+        
+        // Adjust for time zone offset
+        const startDate = new Date(event.year, event.month, event.date);
+        startDate.setMinutes(startDate.getMinutes() - startDate.getTimezoneOffset());
+        newEventStart = startDate.toISOString().slice(0, 16);
+        
         if (event.endDate) {
-            newEventEnd = event.endDate.toISOString().slice(0, 16);
+            const endDate = new Date(event.endDate);
+            endDate.setMinutes(endDate.getMinutes() - endDate.getTimezoneOffset());
+            newEventEnd = endDate.toISOString().slice(0, 16);
+        } else {
+            newEventEnd = "";
         }
+        
+        newPhoneNumber = event.phoneNumber.split(' ')[1];
+        selectedCountryCode = event.phoneNumber.split(' ')[0];
         showOptionsFor = null;
         showModal = true;
     }
@@ -413,10 +435,29 @@
         font-size: 0.9rem;
     }
 
-    .form-group input {
-        padding: 8px;
+    .form-group input,
+    .form-group select {
+        padding: 6px;
         border: 1px solid #ddd;
         border-radius: 4px;
+        font-size: 0.85rem;
+    }
+
+    .form-group div {
+        display: flex;
+        gap: 5px;
+    }
+
+    .form-group select {
+        width: auto;
+        padding: 4px;
+        font-size: 0.85rem;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+
+    .form-group input[type="tel"] {
+        width: 60%;
     }
 
     .modal-actions {
@@ -676,6 +717,15 @@
     .cancel-btn {
         background: #ddd;
     }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .form-group input,
+        .form-group select {
+            font-size: 0.8rem;
+        }
+    }
+
 </style>
 
 <div class="container">
@@ -734,6 +784,7 @@
                     <div class="event-details">
                         <div>{event.name}</div>
                         <div class="event-time">{event.time}</div>
+                        <div class="event-phone">{event.phoneNumber}</div>
                     </div>
                     <div class="more-options" on:click={(e) => toggleOptions(event, e)}>
                         ...
@@ -767,6 +818,24 @@
                         required
                         placeholder="Enter event title"
                     />
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number*</label>
+                    <div style="display: flex; gap: 5px;">
+                        <select bind:value={selectedCountryCode}>
+                            {#each countryCodes as { name, code }}
+                                <option value={code}>{name} ({code})</option>
+                            {/each}
+                        </select>
+                        <input 
+                            type="tel" 
+                            id="phone" 
+                            bind:value={newPhoneNumber}
+                            on:input={(e) => filterNumericInput(e as any)}
+                            required
+                            placeholder="Enter phone number"
+                        />
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="start">Start Date and Time*</label>
